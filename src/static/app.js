@@ -41,6 +41,48 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  function renderActivities(data) {
+    const container = document.getElementById("activities-list");
+    container.innerHTML = "";
+    Object.entries(data).forEach(([name, info]) => {
+      const card = document.createElement("div");
+      card.className = "activity-card";
+      card.innerHTML = `
+        <h4>${name}</h4>
+        <p>${info.description}</p>
+        <p><strong>Schedule:</strong> ${info.schedule}</p>
+        <p><strong>Max Participants:</strong> ${info.max_participants}</p>
+      `;
+
+      const participants = document.createElement("div");
+      participants.className = "participants";
+
+      const title = document.createElement("div");
+      title.className = "participants-title";
+      title.textContent = "Participants";
+
+      const list = document.createElement("ul");
+      list.className = "participants-list";
+
+      if (info.participants && info.participants.length) {
+        info.participants.forEach((email) => {
+          const li = document.createElement("li");
+          li.textContent = email;
+          list.appendChild(li);
+        });
+      } else {
+        const li = document.createElement("li");
+        li.className = "participants-empty";
+        li.textContent = "No participants yet";
+        list.appendChild(li);
+      }
+
+      participants.append(title, list);
+      card.appendChild(participants);
+      container.appendChild(card);
+    });
+  }
+
   // Handle form submission
   signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
